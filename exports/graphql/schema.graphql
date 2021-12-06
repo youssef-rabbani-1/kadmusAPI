@@ -476,8 +476,10 @@ type Guide {
   content: String
   image: UploadFile
   slug: String
+  locale: String
   published_at: DateTime
   file(sort: String, limit: Int, start: Int, where: JSON): [UploadFile]
+  localizations(sort: String, limit: Int, start: Int, where: JSON): [Guide]
 }
 
 type GuideConnection {
@@ -504,6 +506,7 @@ type GuideGroupBy {
   content: [GuideConnectionContent]
   image: [GuideConnectionImage]
   slug: [GuideConnectionSlug]
+  locale: [GuideConnectionLocale]
   published_at: [GuideConnectionPublished_at]
 }
 
@@ -567,6 +570,11 @@ type GuideConnectionSlug {
   connection: GuideConnection
 }
 
+type GuideConnectionLocale {
+  key: String
+  connection: GuideConnection
+}
+
 type GuideConnectionPublished_at {
   key: DateTime
   connection: GuideConnection
@@ -583,6 +591,8 @@ input GuideInput {
   content: String
   image: ID
   slug: String
+  localizations: [ID]
+  locale: String
   published_at: DateTime
   created_by: ID
   updated_by: ID
@@ -599,6 +609,8 @@ input editGuideInput {
   content: String
   image: ID
   slug: String
+  localizations: [ID]
+  locale: String
   published_at: DateTime
   created_by: ID
   updated_by: ID
@@ -1270,7 +1282,7 @@ input editComponentSharedSeoInput {
   shareImage: ID
 }
 
-union Morph = UsersPermissionsMe | UsersPermissionsMeRole | UsersPermissionsLoginPayload | UserPermissionsPasswordPayload | Article | ArticleConnection | ArticleAggregator | ArticleGroupBy | ArticleConnectionId | ArticleConnectionCreated_at | ArticleConnectionUpdated_at | ArticleConnectionTitle | ArticleConnectionDescription | ArticleConnectionContent | ArticleConnectionSlug | ArticleConnectionCategory | ArticleConnectionImage | ArticleConnectionAuthor | ArticleConnectionPublished_date | ArticleConnectionLocale | ArticleConnectionPublished_at | createArticlePayload | updateArticlePayload | deleteArticlePayload | Blog | updateBlogPayload | deleteBlogPayload | Category | CategoryConnection | CategoryAggregator | CategoryGroupBy | CategoryConnectionId | CategoryConnectionCreated_at | CategoryConnectionUpdated_at | CategoryConnectionName | CategoryConnectionSlug | createCategoryPayload | updateCategoryPayload | deleteCategoryPayload | Format | FormatConnection | FormatAggregator | FormatGroupBy | FormatConnectionId | FormatConnectionCreated_at | FormatConnectionUpdated_at | FormatConnectionName | FormatConnectionPublished_at | createFormatPayload | updateFormatPayload | deleteFormatPayload | Global | updateGlobalPayload | deleteGlobalPayload | Guide | GuideConnection | GuideAggregator | GuideGroupBy | GuideConnectionId | GuideConnectionCreated_at | GuideConnectionUpdated_at | GuideConnectionTitle | GuideConnectionPublished | GuideConnectionAuthor | GuideConnectionCategory | GuideConnectionGuide_format | GuideConnectionDescription | GuideConnectionContent | GuideConnectionImage | GuideConnectionSlug | GuideConnectionPublished_at | createGuidePayload | updateGuidePayload | deleteGuidePayload | Homepage | updateHomepagePayload | deleteHomepagePayload | Writer | WriterConnection | WriterAggregator | WriterGroupBy | WriterConnectionId | WriterConnectionCreated_at | WriterConnectionUpdated_at | WriterConnectionName | WriterConnectionPicture | WriterConnectionEmail | createWriterPayload | updateWriterPayload | deleteWriterPayload | I18NLocale | UploadFile | UploadFileConnection | UploadFileAggregator | UploadFileAggregatorSum | UploadFileAggregatorAvg | UploadFileAggregatorMin | UploadFileAggregatorMax | UploadFileGroupBy | UploadFileConnectionId | UploadFileConnectionCreated_at | UploadFileConnectionUpdated_at | UploadFileConnectionName | UploadFileConnectionAlternativeText | UploadFileConnectionCaption | UploadFileConnectionWidth | UploadFileConnectionHeight | UploadFileConnectionFormats | UploadFileConnectionHash | UploadFileConnectionExt | UploadFileConnectionMime | UploadFileConnectionSize | UploadFileConnectionUrl | UploadFileConnectionPreviewUrl | UploadFileConnectionProvider | UploadFileConnectionProvider_metadata | deleteFilePayload | UsersPermissionsPermission | UsersPermissionsRole | UsersPermissionsRoleConnection | UsersPermissionsRoleAggregator | UsersPermissionsRoleGroupBy | UsersPermissionsRoleConnectionId | UsersPermissionsRoleConnectionName | UsersPermissionsRoleConnectionDescription | UsersPermissionsRoleConnectionType | createRolePayload | updateRolePayload | deleteRolePayload | UsersPermissionsUser | UsersPermissionsUserConnection | UsersPermissionsUserAggregator | UsersPermissionsUserGroupBy | UsersPermissionsUserConnectionId | UsersPermissionsUserConnectionCreated_at | UsersPermissionsUserConnectionUpdated_at | UsersPermissionsUserConnectionUsername | UsersPermissionsUserConnectionEmail | UsersPermissionsUserConnectionProvider | UsersPermissionsUserConnectionConfirmed | UsersPermissionsUserConnectionBlocked | UsersPermissionsUserConnectionRole | createUserPayload | updateUserPayload | deleteUserPayload | ComponentSectionsHero | ComponentSharedSeo
+union Morph = UsersPermissionsMe | UsersPermissionsMeRole | UsersPermissionsLoginPayload | UserPermissionsPasswordPayload | Article | ArticleConnection | ArticleAggregator | ArticleGroupBy | ArticleConnectionId | ArticleConnectionCreated_at | ArticleConnectionUpdated_at | ArticleConnectionTitle | ArticleConnectionDescription | ArticleConnectionContent | ArticleConnectionSlug | ArticleConnectionCategory | ArticleConnectionImage | ArticleConnectionAuthor | ArticleConnectionPublished_date | ArticleConnectionLocale | ArticleConnectionPublished_at | createArticlePayload | updateArticlePayload | deleteArticlePayload | Blog | updateBlogPayload | deleteBlogPayload | Category | CategoryConnection | CategoryAggregator | CategoryGroupBy | CategoryConnectionId | CategoryConnectionCreated_at | CategoryConnectionUpdated_at | CategoryConnectionName | CategoryConnectionSlug | createCategoryPayload | updateCategoryPayload | deleteCategoryPayload | Format | FormatConnection | FormatAggregator | FormatGroupBy | FormatConnectionId | FormatConnectionCreated_at | FormatConnectionUpdated_at | FormatConnectionName | FormatConnectionPublished_at | createFormatPayload | updateFormatPayload | deleteFormatPayload | Global | updateGlobalPayload | deleteGlobalPayload | Guide | GuideConnection | GuideAggregator | GuideGroupBy | GuideConnectionId | GuideConnectionCreated_at | GuideConnectionUpdated_at | GuideConnectionTitle | GuideConnectionPublished | GuideConnectionAuthor | GuideConnectionCategory | GuideConnectionGuide_format | GuideConnectionDescription | GuideConnectionContent | GuideConnectionImage | GuideConnectionSlug | GuideConnectionLocale | GuideConnectionPublished_at | createGuidePayload | updateGuidePayload | deleteGuidePayload | Homepage | updateHomepagePayload | deleteHomepagePayload | Writer | WriterConnection | WriterAggregator | WriterGroupBy | WriterConnectionId | WriterConnectionCreated_at | WriterConnectionUpdated_at | WriterConnectionName | WriterConnectionPicture | WriterConnectionEmail | createWriterPayload | updateWriterPayload | deleteWriterPayload | I18NLocale | UploadFile | UploadFileConnection | UploadFileAggregator | UploadFileAggregatorSum | UploadFileAggregatorAvg | UploadFileAggregatorMin | UploadFileAggregatorMax | UploadFileGroupBy | UploadFileConnectionId | UploadFileConnectionCreated_at | UploadFileConnectionUpdated_at | UploadFileConnectionName | UploadFileConnectionAlternativeText | UploadFileConnectionCaption | UploadFileConnectionWidth | UploadFileConnectionHeight | UploadFileConnectionFormats | UploadFileConnectionHash | UploadFileConnectionExt | UploadFileConnectionMime | UploadFileConnectionSize | UploadFileConnectionUrl | UploadFileConnectionPreviewUrl | UploadFileConnectionProvider | UploadFileConnectionProvider_metadata | deleteFilePayload | UsersPermissionsPermission | UsersPermissionsRole | UsersPermissionsRoleConnection | UsersPermissionsRoleAggregator | UsersPermissionsRoleGroupBy | UsersPermissionsRoleConnectionId | UsersPermissionsRoleConnectionName | UsersPermissionsRoleConnectionDescription | UsersPermissionsRoleConnectionType | createRolePayload | updateRolePayload | deleteRolePayload | UsersPermissionsUser | UsersPermissionsUserConnection | UsersPermissionsUserAggregator | UsersPermissionsUserGroupBy | UsersPermissionsUserConnectionId | UsersPermissionsUserConnectionCreated_at | UsersPermissionsUserConnectionUpdated_at | UsersPermissionsUserConnectionUsername | UsersPermissionsUserConnectionEmail | UsersPermissionsUserConnectionProvider | UsersPermissionsUserConnectionConfirmed | UsersPermissionsUserConnectionBlocked | UsersPermissionsUserConnectionRole | createUserPayload | updateUserPayload | deleteUserPayload | ComponentSectionsHero | ComponentSharedSeo
 
 input InputID {
   id: ID!
@@ -1301,8 +1313,8 @@ type Query {
   formatsConnection(sort: String, limit: Int, start: Int, where: JSON): FormatConnection
   global(publicationState: PublicationState): Global
   guide(id: ID!, publicationState: PublicationState): Guide
-  guides(sort: String, limit: Int, start: Int, where: JSON, publicationState: PublicationState): [Guide]
-  guidesConnection(sort: String, limit: Int, start: Int, where: JSON): GuideConnection
+  guides(sort: String, limit: Int, start: Int, where: JSON, publicationState: PublicationState, locale: String): [Guide]
+  guidesConnection(sort: String, limit: Int, start: Int, where: JSON, locale: String): GuideConnection
   homepage(publicationState: PublicationState): Homepage
   writer(id: ID!, publicationState: PublicationState): Writer
   writers(sort: String, limit: Int, start: Int, where: JSON, publicationState: PublicationState): [Writer]
@@ -1366,6 +1378,7 @@ type Mutation {
   """Delete an existing user"""
   deleteUser(input: deleteUserInput): deleteUserPayload
   createArticleLocalization(input: updateArticleInput!): Article!
+  createGuideLocalization(input: updateGuideInput!): Guide!
   upload(refId: ID, ref: String, field: String, source: String, info: FileInfoInput, file: Upload!): UploadFile!
   multipleUpload(refId: ID, ref: String, field: String, source: String, files: [Upload]!): [UploadFile]!
   updateFileInfo(id: ID!, info: FileInfoInput!): UploadFile!
